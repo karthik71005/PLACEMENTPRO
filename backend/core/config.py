@@ -7,16 +7,14 @@ logger = logging.getLogger(__name__)
 
 
 def _debug_env() -> None:
-    """Print which critical env vars are present at startup (values hidden)."""
-    keys = [
-        "MONGO_URI", "mongo_uri",
-        "FIREBASE_SERVICE_ACCOUNT_JSON", "firebase_service_account_json",
-        "MONGO_DB_NAME",
-    ]
-    status = {k: ("SET" if os.environ.get(k) else "MISSING") for k in keys}
-    print(f"[config] ENV CHECK → {status}", flush=True)
-    total = len(os.environ)
-    print(f"[config] Total env vars visible: {total}", flush=True)
+    """Print all env var names and check critical ones."""
+    all_keys = sorted(os.environ.keys())
+    print(f"[config] ALL ENV VAR NAMES: {all_keys}", flush=True)
+    critical = ["MONGO_URI", "mongo_uri", "FIREBASE_SERVICE_ACCOUNT_JSON",
+                "firebase_service_account_json", "MONGO_DB_NAME", "RAILWAY_SERVICE_NAME",
+                "RAILWAY_ENVIRONMENT_NAME", "RAILWAY_PROJECT_NAME"]
+    status = {k: ("SET" if os.environ.get(k) else "MISSING") for k in critical}
+    print(f"[config] CRITICAL CHECK → {status}", flush=True)
 
 
 class Settings(BaseSettings):
