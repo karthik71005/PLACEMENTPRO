@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
     signInWithEmailAndPassword,
-    signInWithPopup,
+    signInWithRedirect,
+    getRedirectResult,
     GoogleAuthProvider,
 } from "firebase/auth";
 import toast from "react-hot-toast";
@@ -62,24 +63,39 @@ export default function Login() {
         }
     };
 
+    // Handle redirect result on page load (fires after Google redirects back)
+    useEffect(() => {
+        const handleRedirectResult = async () => {
+            try {
+                const result = await getRedirectResult(auth);
+                if (result?.user) {
+                    setGoogleLoading(true);
+                    const firebaseUser = result.user;
+                    await api.post("/auth/verify", {
+                        firebase_uid: firebaseUser.uid,
+                        email: firebaseUser.email,
+                        role: "student",
+                    });
+                    await redirectAfterLogin();
+                }
+            } catch (err) {
+                if (err.code !== "auth/no-current-user") {
+                    toast.error(err.message || "Google sign-in failed.");
+                }
+            } finally {
+                setGoogleLoading(false);
+            }
+        };
+        handleRedirectResult();
+    }, []);
+
     const handleGoogle = async () => {
-        setGoogleLoading(true);
         try {
             const provider = new GoogleAuthProvider();
-            const result = await signInWithPopup(auth, provider);
-            const firebaseUser = result.user;
-            // Register in MongoDB (idempotent — /auth/verify upserts by firebase_uid)
-            await api.post("/auth/verify", {
-                firebase_uid: firebaseUser.uid,
-                email: firebaseUser.email,
-                role: "student",
-            });
-            // Now /auth/me will succeed — refresh role and navigate
-            await redirectAfterLogin();
+            await signInWithRedirect(auth, provider);
+            // Page will redirect to Google — result handled in useEffect above
         } catch (err) {
             toast.error(err.message || "Google sign-in failed.");
-        } finally {
-            setGoogleLoading(false);
         }
     };
 
