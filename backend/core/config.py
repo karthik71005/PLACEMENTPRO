@@ -33,7 +33,7 @@ class Settings(BaseSettings):
     firebase_service_account_json: str
 
     # CORS
-    allowed_origins: str = "http://localhost:5173,http://localhost:5174"
+    allowed_origins: str = "http://localhost:5173,http://localhost:5174,https://placementpro-one.vercel.app"
 
     # Redis
     redis_url: str = "redis://localhost:6379/0"
