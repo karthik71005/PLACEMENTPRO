@@ -1,0 +1,66 @@
+# ─── Node / Frontend ───────────────────────────────────────────
+node_modules/
+dist/
+.vite/
+coverage/
+*.local
+
+# ─── Python / Backend ──────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+venv/
+env/
+.venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# ─── Environment & Secrets ─────────────────────────────────────
+.env
+.env.*
+!.env.example
+serviceAccountKey.json
+*firebase*.json
+
+# ─── Docker ────────────────────────────────────────────────────
+.docker/
+
+# ─── IDEs ──────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ─── OS ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Logs ──────────────────────────────────────────────────────
+*.log
+logs/
+
+# ─── Debug / Temp output files ──────────────────────────────────
+out.txt
+temp.log
+full.log
+backend/error.txt
+backend/full_error.txt
+backend/full_error_new.txt
+backend/openapi_error.txt
+backend/test_output.txt
+backend/err.log
+backend/error.log
+backend/error_utf8.log
+frontend/lint-output.txt
+
+# ─── Dev-only scripts (not needed in production) ────────────────
+backend/debug_api.py
+backend/cleanup.py
+backend/check_db.js

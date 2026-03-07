@@ -1,0 +1,130 @@
+{
+  "name": "Placement Drive Broadcast",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "broadcast",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "469c6a2f-cca7-48c6-98d1-67b77c024505",
+      "name": "Webhook",
+      "webhookId": "320b5c93-ac7d-4329-9426-d4f51d9c356f"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "body.students",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3,
+      "position": [
+        220,
+        0
+      ],
+      "id": "ce743b4f-151c-4993-9509-3e6d0d3ef594",
+      "name": "Split Students Array"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        440,
+        0
+      ],
+      "id": "9e024bf0-2d21-4b88-92f0-114257f8a172",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "fromEmail": "tpo@sahyadri.edu.in",
+        "toEmail": "={{ $json.email }}",
+        "subject": "=🎓 You're eligible for {{ $('Webhook').first().json.body.drive.company_name }} — {{ $('Webhook').first().json.body.drive.role }}!",
+        "html": "=<div style=\"font-family: 'Space Grotesk', 'Arial Black', 'Segoe UI Black', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9fafb;\">\n  \n  <div style=\"background: #ffffff; border: 4px solid #000000; padding: 0; box-shadow: 8px 8px 0px #000000;\">\n    \n    <div style=\"background: #FFD700; padding: 24px; border-bottom: 4px solid #000000; text-align: center;\">\n      <h1 style=\"color: #000000; margin: 0; font-size: 32px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;\">PlacementPro</h1>\n      <div style=\"margin-top: 12px;\">\n        <span style=\"color: #000000; font-weight: 800; text-transform: uppercase; font-size: 12px; border: 2px solid #000; background: #fff; padding: 4px 12px;\">T&P Office</span>\n      </div>\n    </div>\n\n    <div style=\"padding: 32px;\">\n      <h2 style=\"color: #000000; margin-top: 0; font-size: 28px; font-weight: 900; text-transform: uppercase;\">Incoming: {{ $json.name }}</h2>\n\n      <p style=\"color: #000000; font-family: 'Courier New', Courier, monospace; font-size: 16px; font-weight: 700; line-height: 1.5; border-left: 6px solid #FFD700; padding-left: 16px;\">\n        YOU HAVE BEEN MARKED <span style=\"background: #4ADE80; border: 2px solid #000; padding: 2px 6px; font-weight: 900;\">ELIGIBLE</span> FOR A NEW PLACEMENT DRIVE.\n      </p>\n\n      <table style=\"border-collapse: collapse; width: 100%; margin: 32px 0; border: 4px solid #000000; background: #ffffff;\">\n        <tr>\n          <td style=\"padding: 16px; font-weight: 900; color: #000000; width: 120px; border: 3px solid #000000; background: #f3f4f6; text-transform: uppercase;\">Company</td>\n          <td style=\"padding: 16px; color: #000000; border: 3px solid #000000; font-weight: 700; font-family: 'Courier New', Courier, monospace; font-size: 16px;\">{{ $('Webhook').first().json.body.drive.company_name }}</td>\n        </tr>\n        <tr>\n          <td style=\"padding: 16px; font-weight: 900; color: #000000; border: 3px solid #000000; background: #f3f4f6; text-transform: uppercase;\">Role</td>\n          <td style=\"padding: 16px; color: #000000; border: 3px solid #000000; font-weight: 700; font-family: 'Courier New', Courier, monospace; font-size: 16px;\">{{ $('Webhook').first().json.body.drive.role }}</td>\n        </tr>\n        <tr>\n          <td style=\"padding: 16px; font-weight: 900; color: #000000; border: 3px solid #000000; background: #f3f4f6; text-transform: uppercase;\">Date</td>\n          <td style=\"padding: 16px; color: #000000; border: 3px solid #000000; font-weight: 700; font-family: 'Courier New', Courier, monospace; font-size: 16px;\">{{ $('Webhook').first().json.body.drive.drive_date }}</td>\n        </tr>\n      </table>\n\n      <div style=\"text-align: center; margin: 40px 0 16px 0;\">\n        <a href=\"http://localhost:5173/student/feed\"\n           style=\"background: #D8B4FE; color: #000000; padding: 16px 32px; border: 4px solid #000000; text-decoration: none; font-weight: 900; font-size: 18px; display: inline-block; text-transform: uppercase; box-shadow: 6px 6px 0px #000000; transition: all 0.2s;\">\n          Apply Now ➔\n        </a>\n      </div>\n\n      <hr style=\"border: none; border-top: 4px dashed #000000; margin: 40px 0 24px 0;\" />\n\n      <p style=\"color: #000000; font-family: 'Courier New', Courier, monospace; font-size: 12px; font-weight: 700; text-align: center; text-transform: uppercase;\">\n        Automated ping from PlacementPro.<br />\n        Sahyadri College of Engineering & Management\n      </p>\n      \n    </div>\n  </div>\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        660,
+        0
+      ],
+      "id": "46037ea7-d4c3-4485-bc7b-2fa8e59f8387",
+      "name": "Send Email",
+      "webhookId": "549a522a-e01b-4fed-bf1a-fc0c9a3b56cc",
+      "credentials": {
+        "smtp": {
+          "id": "Je9PmgJKkVvN6sM0",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Split Students Array",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Students Array": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c7ba0dfe-493b-4a1a-a8ad-8e9b977ac1ab",
+  "meta": {
+    "instanceId": "332965606099e24562e915372d06856bce679a6c1ffd8cc4f37c39eb326f3e30"
+  },
+  "id": "MGApkApIfwweji08",
+  "tags": []
+}

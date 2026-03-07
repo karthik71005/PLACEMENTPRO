@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Variables ────────────────────────────────────────────── */
+:root {
+  --color-primary: #3b82f6;
+  --color-primary-dark: #1d4ed8;
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --radius: 0.5rem;
+}
+
+/* ── Base ─────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  background-color: #FAFAFA;
+  color: #000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ── Skeleton Shimmer ─────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg,
+      #f8f8f8 25%,
+      #eeeeee 50%,
+      #f8f8f8 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 0;
+  border: 3px solid black;
+  box-shadow: 4px 4px 0px 0px black;
+}
+
+/* ── Utility: fade-in ─────────────────────────────────────────── */
+.fade-in {
+  animation: fade-in 0.2s ease-out both;
+}
+
+/* ── Scrollable chat window ───────────────────────────────────── */
+.chat-scroll {
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+/* ── Custom Scrollbar Brutal ───────────────────────────────────── */
+.scrollbar-brutal::-webkit-scrollbar {
+  width: 12px;
+  border-left: 3px solid black;
+}
+
+.scrollbar-brutal::-webkit-scrollbar-track {
+  background: white;
+}
+
+.scrollbar-brutal::-webkit-scrollbar-thumb {
+  background: #FFCC00;
+  border-left: 3px solid black;
+  border-bottom: 3px solid black;
+  border-top: 3px solid black;
+}
+
+.scrollbar-brutal::-webkit-scrollbar-thumb:hover {
+  background: black;
+}

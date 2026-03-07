@@ -1,0 +1,70 @@
+version: "3.9"
+
+services:
+  # ── FastAPI Backend ────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: placementpro_backend
+    ports:
+      - "8001:8000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - mongo
+    restart: unless-stopped
+    networks:
+      - placementpro_net
+
+  # ── Redis (Caching & Rate Limiting) ────────────────────────────
+  redis:
+    image: redis:7.2-alpine
+    container_name: placementpro_redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - placementpro_net
+
+  # ── MongoDB (local dev only — use Atlas in production) ─────────
+  mongo:
+    image: mongo:7.0
+    container_name: placementpro_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+    networks:
+      - placementpro_net
+
+  # ── n8n Workflow Automation ────────────────────────────────────
+  n8n:
+    image: n8nio/n8n:1.94.1
+    container_name: placementpro_n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://placementpro_n8n:5678/
+      - N8N_SECURE_COOKIE=false
+      - GENERIC_TIMEZONE=Asia/Kolkata
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./n8n:/home/node/.n8n/workflows
+    restart: unless-stopped
+    networks:
+      - placementpro_net
+
+volumes:
+  mongo_data:
+  n8n_data:
+
+networks:
+  placementpro_net:
+    driver: bridge
