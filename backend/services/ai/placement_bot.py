@@ -122,12 +122,17 @@ async def get_interview_schedule(company_name: str) -> str:
 
 class PlacementBot:
     def __init__(self):
-        gemini_api_key = os.getenv("GEMINI_API_KEY")
-        
+        gemini_api_key = os.getenv("GEMINI_API_KEY") or os.getenv("gemini_api_key")
+        if not gemini_api_key:
+            raise EnvironmentError(
+                "GEMINI_API_KEY environment variable is not set. "
+                "Please add it to your Railway service variables."
+            )
+
         self.llm = ChatGoogleGenerativeAI(
             model="gemini-2.0-flash",
             google_api_key=gemini_api_key,
-            temperature=0.2, # Low temp for factual consistency
+            temperature=0.2,  # Low temp for factual consistency
             max_output_tokens=500
         )
         logger.info("PlacementBot LLM initialized successfully with gemini-2.0-flash")
