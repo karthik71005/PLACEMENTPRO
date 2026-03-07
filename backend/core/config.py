@@ -1,8 +1,32 @@
-from pydantic_settings import BaseSettings
+import os
+import logging
 from functools import lru_cache
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+logger = logging.getLogger(__name__)
+
+
+def _debug_env() -> None:
+    """Print which critical env vars are present at startup (values hidden)."""
+    keys = [
+        "MONGO_URI", "mongo_uri",
+        "FIREBASE_SERVICE_ACCOUNT_JSON", "firebase_service_account_json",
+        "MONGO_DB_NAME",
+    ]
+    status = {k: ("SET" if os.environ.get(k) else "MISSING") for k in keys}
+    print(f"[config] ENV CHECK → {status}", flush=True)
+    total = len(os.environ)
+    print(f"[config] Total env vars visible: {total}", flush=True)
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+        extra="ignore",
+    )
+
     # MongoDB
     mongo_uri: str
     mongo_db_name: str = "placementpro"
@@ -39,13 +63,10 @@ class Settings(BaseSettings):
     def allowed_origins_list(self) -> list[str]:
         return [o.strip() for o in self.allowed_origins.split(",")]
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
-
 
 @lru_cache()
 def get_settings() -> Settings:
+    _debug_env()
     return Settings()
 
 
