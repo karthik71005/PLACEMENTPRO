@@ -95,7 +95,7 @@ curl http://localhost:8000/health
 | Auth | Firebase Authentication (JWT) |
 | Automation | n8n (email/SMS workflows) |
 | AI | LangChain, Gemini, Pinecone |
-| Deployment | Vercel (frontend), Docker + EC2 / Cloud Run (backend) |
+| Deployment | Vercel (frontend),/ Railway (backend)|
 
 ---
 
